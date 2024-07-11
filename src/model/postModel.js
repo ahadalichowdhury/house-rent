@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const postSchema = mongoose.Schema(
   {
+    name: String,
     city: {
       type: String,
     },
@@ -11,7 +12,7 @@ const postSchema = mongoose.Schema(
     address: {
       type: String,
     },
-    image: [
+    images: [
       {
         type: String,
       },
