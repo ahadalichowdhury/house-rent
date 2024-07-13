@@ -105,7 +105,6 @@ exports.getPersonalInfo = catchAsync(async (req, res, next) => {
   return res.status(200).json({ success: true, data: user });
 });
 
-
 exports.createPost = catchAsync(async (req, res, next) => {
   const reqBody = req.body;
 
@@ -125,17 +124,15 @@ exports.createPost = catchAsync(async (req, res, next) => {
 exports.deletePost = catchAsync(async (req, res, next) => {
   const postId = req.params.postId;
 
-  const post = await postModel.findById(postId).populate("parking_area");
+  const post = await postModel.findById(postId);
 
   if (!post) {
     return next(new ErrorHandler(400, "Area not found"));
   }
 
-  
-
   // console.log("parking area deleted", deletedParkingAreas);
   // Delete the area
-  await postModel.findByIdAndDelete(areaId);
+  await postModel.findByIdAndDelete(postId);
 
   return res.status(200).json({
     status: true,
@@ -205,7 +202,7 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
 exports.getSinglePost = catchAsync(async (req, res, next) => {
   const postId = req.params.postId;
 
-  const post = await postModel.findById(postId)
+  const post = await postModel.findById(postId);
   if (!post) {
     return next(new ErrorHandler(400, "Area not found"));
   }
@@ -283,17 +280,18 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
   await bookingModel.deleteMany({ _id: { $in: bookingIdsToDelete } });
 
-  await userModel.findByIdAndDelete(userId); 
+  await userModel.findByIdAndDelete(userId);
 
   return res.status(200).json({
     status: true,
-    message: "User deleted successfully"
+    message: "User deleted successfully",
   });
 });
 
-
 exports.showAllAdmin = catchAsync(async (req, res, next) => {
-  const admin = await userModel.find({ role: "admin" }).populate("personal_info")
+  const admin = await userModel
+    .find({ role: "admin" })
+    .populate("personal_info");
 
   if (!admin) {
     return next(new ErrorHandler(400, "Admin not found"));
@@ -324,7 +322,6 @@ exports.inviteAsAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.showAllBookingFromAdmin = catchAsync(async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -340,7 +337,7 @@ exports.showAllBookingFromAdmin = catchAsync(async (req, res, next) => {
 
   const [posts, totalPosts] = await Promise.all([
     postModel.find(filter).skip(skip).limit(parseInt(limit)).sort(sortOptions),
-    postModel.countDocuments(filter)
+    postModel.countDocuments(filter),
   ]);
 
   const totalPages = Math.ceil(totalPosts / limit);
@@ -353,10 +350,3 @@ exports.showAllBookingFromAdmin = catchAsync(async (req, res, next) => {
     data: posts,
   });
 });
-
-
-
-
-
-
-
