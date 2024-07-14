@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const postSchema = mongoose.Schema(
   {
@@ -59,14 +59,18 @@ const postSchema = mongoose.Schema(
       default: false,
     },
     map_link: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
 
   {
     versionKey: false,
     timestamps: true,
   }
-)
+);
 
-const postModel = mongoose.model('Post', postSchema)
+const postModel = mongoose.model("Post", postSchema);
 
-module.exports = postModel
+module.exports = postModel;

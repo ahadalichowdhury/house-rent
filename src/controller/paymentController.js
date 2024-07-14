@@ -12,9 +12,9 @@ const trans_id = new ObjectId().toString();
 
 exports.paymentApply = async (req, res) => {
   const userId = req.headers.userId;
-  console.log(userId)
+  console.log(userId);
   const postId = req.params.postId;
-  console.log(postId)
+  console.log(postId);
   const { price } = req.body;
   try {
     const user = await userModel.findById(userId).populate("personal_info");
@@ -57,13 +57,12 @@ exports.paymentApply = async (req, res) => {
     const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
     sslcz.init(data).then((apiResponse) => {
       // Redirect the user to payment gateway
-      console.log(apiResponse)
+      console.log(apiResponse);
       let GatewayPageURL = apiResponse.GatewayPageURL;
-      console.log(GatewayPageURL)
+      console.log(GatewayPageURL);
       res.send({ url: GatewayPageURL });
       // console.log("Redirecting to: ", GatewayPageURL);
     });
-
   } catch (error) {
     res.status(500).json({ status: "error", message: "Internal server error" });
   }
@@ -71,21 +70,36 @@ exports.paymentApply = async (req, res) => {
 
 exports.successPayment = catchAsync(async (req, res, next) => {
   const postId = req.params.postId;
-  console.log(postId)
+  const userId = req.headers.userId;
+
+  const user = await userModel.findById(userId);
+  if (!user) {
+    return res
+     .status(404)
+     .json({ status: "fail", message: "User not found" });
+  }
+
+  console.log(postId);
   const post = await postModel.findByIdAndUpdate(
     postId,
     {
       is_paid: true,
+      user: user,
     },
     { new: true }
   );
-  console.log(post)
 
+  const updateUser = await userModel.findByIdAndUpdate(userId,{
+    
+  })
+  console.log(post);
 
   if (!post) {
     return next(new ErrorHandler(404, "post not found"));
   }
 
-  return res.status(200).redirect(`${FRONTEND_URL}/success-payment`);
+  return res
+    .status(200)
+    .redirect(`${FRONTEND_URL}/success-payment/id=${postId}`);
   // console.log(`{process.env.FRONTEND_URL}/success-payment`)
 });

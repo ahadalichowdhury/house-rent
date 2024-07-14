@@ -160,44 +160,61 @@ exports.updatePost = catchAsync(async (req, res, next) => {
   });
 });
 
+// exports.getAllPost = catchAsync(async (req, res, next) => {
+//   // const page = parseInt(req.query.page) || 1;
+//   // const limit = parseInt(req.query.limit) || 10;
+//   // const sortBy = req.query.sortBy || "createdAt";
+//   // const sortOrder = req.query.sortOrder || "desc";
+//   // const searchQuery = req.query.search;
+
+//   // const skip = (page - 1) * limit;
+
+//   const sortOptions = {};
+//   sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
+
+//   let areasQuery = postModel.find();
+//   let areasCountQuery = postModel.countDocuments();
+
+//   if (searchQuery) {
+//     areasQuery = postModel.find({
+//       name: { $regex: searchQuery, $options: "i" },
+//     });
+//     areasCountQuery = postModel.countDocuments({
+//       name: { $regex: searchQuery, $options: "i" },
+//     });
+//   }
+
+//   areasQuery = areasQuery.skip(skip).limit(limit).sort(sortOptions);
+
+//   const [areas, totalAreas] = await Promise.all([areasQuery, areasCountQuery]);
+
+//   return res.status(200).json({
+//     status: true,
+//     data: areas,
+//     metadata: {
+//       currentPage: page,
+//       totalPages: Math.ceil(totalAreas / limit),
+//       totalDocuments: totalAreas,
+//     },
+//   });
+// });
 exports.getAllPost = catchAsync(async (req, res, next) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const sortBy = req.query.sortBy || "createdAt";
-  const sortOrder = req.query.sortOrder || "desc";
-  const searchQuery = req.query.search;
+  // Retrieve all posts without sorting, searching, and filtering
+  const posts = await postModel.find();
 
-  const skip = (page - 1) * limit;
+  // Count the total number of posts
+  const totalPosts = await postModel.countDocuments();
 
-  const sortOptions = {};
-  sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
-
-  let areasQuery = postModel.find();
-  let areasCountQuery = postModel.countDocuments();
-
-  if (searchQuery) {
-    areasQuery = postModel.find({
-      name: { $regex: searchQuery, $options: "i" },
-    });
-    areasCountQuery = postModel.countDocuments({
-      name: { $regex: searchQuery, $options: "i" },
-    });
-  }
-
-  areasQuery = areasQuery.skip(skip).limit(limit).sort(sortOptions);
-
-  const [areas, totalAreas] = await Promise.all([areasQuery, areasCountQuery]);
-
+  // Send the response with the data and metadata
   return res.status(200).json({
     status: true,
-    data: areas,
+    data: posts,
     metadata: {
-      currentPage: page,
-      totalPages: Math.ceil(totalAreas / limit),
-      totalDocuments: totalAreas,
+      totalDocuments: totalPosts,
     },
   });
 });
+
 
 exports.getSinglePost = catchAsync(async (req, res, next) => {
   const postId = req.params.postId;

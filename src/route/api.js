@@ -110,6 +110,7 @@ router.post(
 //done
 router.post(
   "/success/:postId",
+  authVerifyMiddleware.authMiddleware("user"),
   paymentController.successPayment
 );
 

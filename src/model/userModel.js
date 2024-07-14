@@ -21,10 +21,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "PersonalInfo",
     },
-    booking: [{
+    booking: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Booking",
-    }],
+      ref: "Post",
+    },
   },
   {
     versionKey: false,
