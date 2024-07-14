@@ -74,9 +74,7 @@ exports.successPayment = catchAsync(async (req, res, next) => {
 
   const user = await userModel.findById(userId);
   if (!user) {
-    return res
-     .status(404)
-     .json({ status: "fail", message: "User not found" });
+    return res.status(404).json({ status: "fail", message: "User not found" });
   }
 
   console.log(postId);
@@ -89,9 +87,13 @@ exports.successPayment = catchAsync(async (req, res, next) => {
     { new: true }
   );
 
-  const updateUser = await userModel.findByIdAndUpdate(userId,{
-    
-  })
+  const updateUser = await userModel.findByIdAndUpdate(
+    userId,
+    {
+      booking: postId,
+    },
+    { new: true }
+  );
   console.log(post);
 
   if (!post) {
