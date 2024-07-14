@@ -114,4 +114,7 @@ router.post(
   paymentController.successPayment
 );
 
+router.get("/user/show",  authVerifyMiddleware.authMiddleware("user"), userController.showBookingPost
+)
+
 module.exports = router

@@ -403,3 +403,17 @@ exports.searchPost = catchAsync(async (req, res, next) => {
 });
 
 
+exports.showBookingPost = catchAsync(async (req, res, next)=>{
+  const userId = req.headers.userId;
+
+  const post = await userModel.findById(userId).populate('booking');
+
+  if(!post){
+    return next(new ErrorHandler(404, 'Post not found'));
+  }
+
+  return res.status(200).json({
+    status: true,
+    data: post,
+  });
+})
