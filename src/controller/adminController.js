@@ -127,7 +127,7 @@ exports.deletePost = catchAsync(async (req, res, next) => {
   const post = await postModel.findById(postId);
 
   if (!post) {
-    return next(new ErrorHandler(400, "Area not found"));
+    return next(new ErrorHandler(400, "post not found"));
   }
 
   // console.log("parking area deleted", deletedParkingAreas);
@@ -204,7 +204,7 @@ exports.getSinglePost = catchAsync(async (req, res, next) => {
 
   const post = await postModel.findById(postId);
   if (!post) {
-    return next(new ErrorHandler(400, "Area not found"));
+    return next(new ErrorHandler(400, "post not found"));
   }
 
   return res.status(200).json({
