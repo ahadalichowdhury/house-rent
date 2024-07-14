@@ -28,7 +28,7 @@ exports.paymentApply = async (req, res) => {
       total_amount: price,
       currency: "BDT",
       tran_id: trans_id, // use unique tran_id for each api call
-      success_url: `${FRONTEND_URL}/success/${postId}`,
+      success_url: `${FRONTEND_URL}/success-payment/${postId}`,
       fail_url: `${FRONTEND_URL}/fail-payment`,
       cancel_url: `${FRONTEND_URL}/cancel-payment`,
       ipn_url: `${FRONTEND_URL}/ipn`,
