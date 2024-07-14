@@ -215,7 +215,6 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.getSinglePost = catchAsync(async (req, res, next) => {
   const postId = req.params.postId;
 
@@ -353,7 +352,14 @@ exports.showAllBookingFromAdmin = catchAsync(async (req, res, next) => {
   const filter = { is_paid: true };
 
   const [posts, totalPosts] = await Promise.all([
-    postModel.find(filter).skip(skip).limit(limit).sort(sortOptions).populate('user'),
+    postModel
+      .find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort(sortOptions)
+      .populate({ path: "user", model: "User", populate:{
+        path: "personal_info"
+      } }),
     postModel.countDocuments(filter),
   ]);
 
