@@ -200,7 +200,7 @@ exports.updatePost = catchAsync(async (req, res, next) => {
 // });
 exports.getAllPost = catchAsync(async (req, res, next) => {
   // Retrieve all posts without sorting, searching, and filtering
-  const posts = await postModel.find();
+  const posts = await postModel.find().populate("user");
 
   // Count the total number of posts
   const totalPosts = await postModel.countDocuments();
