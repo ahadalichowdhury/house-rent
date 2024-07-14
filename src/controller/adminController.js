@@ -353,7 +353,7 @@ exports.showAllBookingFromAdmin = catchAsync(async (req, res, next) => {
   const filter = { is_paid: true };
 
   const [posts, totalPosts] = await Promise.all([
-    postModel.find(filter).skip(skip).limit(parseInt(limit)).sort(sortOptions),
+    postModel.find(filter).skip(skip).limit(limit).sort(sortOptions).populate('user'),
     postModel.countDocuments(filter),
   ]);
 
